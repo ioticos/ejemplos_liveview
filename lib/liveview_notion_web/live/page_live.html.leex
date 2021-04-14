@@ -1,0 +1,97 @@
+<section class="">
+  <h1>Pruebas para LiveView Bases</h1>
+  <br>
+
+  <%# LIVEVIEW A JS%>
+  <h3>COMPONENTE STATELESS</h3>
+  <div>
+    <a href="/componentes"> IR AL LA DEMO DE COMPONENTES</a>
+  </div>
+  <hr>
+  <br>
+  <br>
+
+  <%# LIVEVIEW A JS%>
+  <h3>JS A LIVEVIEW</h3>
+  <div id="counter" phx-hook="enviador" x-data="{}">
+    <li>Mirar la consola del navegador</li>
+  </div>
+
+  IMPORTANTE: Para que los hooks funcionen en app.js la línea a donde hacemos la conexión al livesocket, 
+
+  <hr>
+  <br>
+  <br>
+
+
+  <%# JS A LIVEVIEW %>
+  <h3>JS A LIVEVIEW</h3>
+  <div id="counter" phx-hook="enviador" x-data="{}">
+    <button onclick="enviar()">
+      ENVIAR a JS
+    </button>
+  </div>
+  <hr>
+  <br>
+  <br>
+
+
+  <%# DISPARAR EVENTOS EN EL FRONT %>
+  <h3>DISPARAR EVENTOS EN EL FRONT</h3>
+  <h4>Usuarios Conectados -> <%=@usuarios_conectados%></h4>
+  <hr>
+  <br>
+  <br>
+  
+
+  <%# FORMULARIOS DINAMICOS PHX-CHANGE %>
+  <h3>FORMULARIOS DINAMICOS PHX-CHANGE</h3>
+  <span>Volumen -> <%=@volumen%></span>
+  <form phx-change="pote_update">
+    <input name="volumen" type="range" min="1" max="100"  value="<%=@volumen%>" />
+  </form>
+  <hr>
+  <br>
+  <br>
+
+  <%# BOTON CON VALORES %>
+  <h3>BOTON ENVIA VALORES</h3>
+  <span><%=@temperatura%> ºC </span> <span><%=@humedad%> %</span>
+  <button phx-click="suma1" phx-value-temperatura="10" phx-value-humedad="55">ENVIAR TEMP y HUM</button>
+  <hr>
+  <br>
+  <br>
+  <br>
+
+  <%# BOTON COMUN %>
+  <h3>BOTON PHX-CLIC</h3>
+  <span><%=@contador%></span>
+  <button phx-click="suma1">SUMA 1</button>
+  <hr>
+
+<script>
+
+
+function enviar(){
+  instancia_hook.pushEvent('jsToPhx', {valor: 10}, (reply, ref) =>{
+    console.log(reply)
+    alert(reply.respuesta)
+  });
+}
+
+
+instancia_hook = null;
+let Hooks = {}
+
+Hooks.enviador = {
+    mounted() {
+      console.log("mounted");
+      instancia_hook = this;
+
+      this.handleEvent("phxToJs", (payload) => {
+        console.log("data received: " + payload.value)
+      })
+    },
+    
+  }
+</script>
